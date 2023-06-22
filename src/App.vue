@@ -32,8 +32,18 @@
       <v-btn v-if="!isAuthenticated" to="/login"><v-icon>mdi-login</v-icon></v-btn>
     </v-bottom-navigation>
 
-    <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout" :top="snackbar.top" :close-on-content-click=true location="top">
-      {{ snackbar.message }}
+    <v-snackbar v-model="snackbarinfo.show" :color="snackbarinfo.color" :timeout="snackbarinfo.timeout"
+                :top="snackbarinfo.top" :close-on-content-click=true location="top">
+      {{ snackbarinfo.message }}
+    </v-snackbar>
+    <v-snackbar v-model="snackbarorder.show" :color="snackbarorder.color" :timeout="snackbarorder.timeout"
+                :top="snackbarorder.top" :close-on-content-click=true location="center">
+      The order has been {{ snackbarorder.message.status }}
+      <template v-slot:actions>
+        <v-btn color="primary" variant="text" @click="snackbarinfo.show = false" to="/orders">
+          Go to
+        </v-btn>
+      </template>
     </v-snackbar>
   </v-app>
 </template>
@@ -62,18 +72,67 @@ export default {
     const store = useStore();
 
     const isAuthenticated = computed(() => store.getters.isAuthenticated);
-    const snackbar = computed(() => store.state.snackbar);
+    const snackbarinfo = computed(() => store.state.snackbarinfo);
+    const snackbarorder = computed(() => store.state.snackbarorder);
+
+    socket.on("assigned", () => {
+      store.commit('showSnackbarorder', {
+        message: {
+          id: '',
+          status: 'assigned'
+        },
+        color: 'info',
+      });
+    });
+    socket.on("cooked", () => {
+      store.commit('showSnackbarorder', {
+        message: {
+          id: '',
+          status: 'cooked'
+        },
+        color: 'info',
+      });
+    });
+    socket.on("recovered", () => {
+      store.commit('showSnackbarorder', {
+        message: {
+          id: '',
+          status: 'recovered'
+        },
+        color: 'info',
+      });
+    });
+    socket.on("arrived", () => {
+      store.commit('showSnackbarorder', {
+        message: {
+          id: '',
+          status: 'arrived'
+        },
+        color: 'info',
+      });
+    });
+    socket.on("delivered", () => {
+      store.commit('showSnackbarorder', {
+        message: {
+          id: '',
+          status: 'delivered'
+        },
+        color: 'info',
+      });
+    });
 
     const logout = () => {
+      this.socket.emit("disconnect")
       store.commit('clearTokens');
-      store.commit('showSnackbar', {
+      store.commit('showSnackbarinfo', {
         message: 'Log out successful',
         color: 'success',
       });
     };
 
     return {
-      snackbar,
+      snackbarinfo,
+      snackbarorder,
       isAuthenticated,
       logout
     }
