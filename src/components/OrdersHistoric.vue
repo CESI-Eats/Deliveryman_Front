@@ -42,10 +42,8 @@
           </v-row>
         </v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn type="submit" color="primary" @click="updateOrder(order)" :to="`/account`">
-          <span v-if="order.status ==='cooked'">Recover</span>
-            <span v-if="order.status ==='recovered'">Arrive</span>
-            <span v-if="order.status ==='arrived'">Deliver</span>
+          <v-btn type="submit" color="primary" @click="updateOrder(order)" :to="`/orders`">
+          <span v-if="order.status ==='cooked'">Deliver</span>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -101,7 +99,7 @@ export default {
         message: 'Recovering orders...',
         color: 'info',
       });
-      bffAxios.get('/mycart')
+      bffAxios.get('/myorders')
           .then(response => {
             this.orders = response.data;
             store.commit('showSnackbarinfo', {

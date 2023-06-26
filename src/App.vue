@@ -51,6 +51,7 @@
 <script>
 import {computed} from 'vue';
 import {useStore} from '@/services/store';
+import {io} from "socket.io-client";
 
 export default {
   name: 'App',
@@ -75,7 +76,9 @@ export default {
     const snackbarinfo = computed(() => store.state.snackbarinfo);
     const snackbarorder = computed(() => store.state.snackbarorder);
 
-    socket.on("assigned", () => {
+    const socket = io(process.env.WEBSOCKET_URL);
+
+    socket.on("order.assigned", () => {
       store.commit('showSnackbarorder', {
         message: {
           id: '',
@@ -84,7 +87,7 @@ export default {
         color: 'info',
       });
     });
-    socket.on("cooked", () => {
+    socket.on("order.cooked", () => {
       store.commit('showSnackbarorder', {
         message: {
           id: '',
@@ -93,36 +96,9 @@ export default {
         color: 'info',
       });
     });
-    socket.on("recovered", () => {
-      store.commit('showSnackbarorder', {
-        message: {
-          id: '',
-          status: 'recovered'
-        },
-        color: 'info',
-      });
-    });
-    socket.on("arrived", () => {
-      store.commit('showSnackbarorder', {
-        message: {
-          id: '',
-          status: 'arrived'
-        },
-        color: 'info',
-      });
-    });
-    socket.on("delivered", () => {
-      store.commit('showSnackbarorder', {
-        message: {
-          id: '',
-          status: 'delivered'
-        },
-        color: 'info',
-      });
-    });
 
     const logout = () => {
-      this.socket.emit("disconnect")
+      this.socket.disconnect();
       store.commit('clearTokens');
       store.commit('showSnackbarinfo', {
         message: 'Log out successful',
