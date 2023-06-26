@@ -17,6 +17,7 @@
             </v-form>
           </v-card-text>
           <v-card-actions class="justify-center">
+            <v-btn type="submit" color="Secondary" @click="collectKitty()" :to="`/account`">Collect kitty ({{form.kitty}})</v-btn>
             <v-btn type="submit" color="primary" @click="updateAccount()" :to="`/account`">Update</v-btn>
             <v-btn type="submit" color="error" @click="deleteAccount()" :to="`/`">Delete</v-btn>
           </v-card-actions>
@@ -38,6 +39,7 @@ export default {
         name: '',
         birthday: '',
         phoneNumber: '',
+        kitty: '',
         address: {
           street: '',
           postalCode: '',
@@ -106,6 +108,25 @@ export default {
           .catch(() => {
             store.commit('showSnackbarinfo', {
               message: 'delete failed',
+              color: 'error',
+            });
+          });
+    },
+    collectKitty() {
+      store.commit('showSnackbarinfo', {
+        message: 'Collect kitty...',
+        color: 'info',
+      });
+      bffAxios.put('/collectkitty', this.form)
+          .then(() => {
+            store.commit('showSnackbarinfo', {
+              message: 'Kitty collected',
+              color: 'success',
+            });
+          })
+          .catch(() => {
+            store.commit('showSnackbarinfo', {
+              message: 'Collect kitty failed',
               color: 'error',
             });
           });
