@@ -39,7 +39,7 @@ export default {
         name: '',
         birthday: '',
         phoneNumber: '',
-        kitty: '',
+        kitty: 0,
         address: {
           street: '',
           postalCode: '',

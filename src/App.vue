@@ -76,7 +76,7 @@ export default {
     const snackbarinfo = computed(() => store.state.snackbarinfo);
     const snackbarorder = computed(() => store.state.snackbarorder);
 
-    const socket = io(process.env.WEBSOCKET_URL);
+    const socket = io(process.env.VUE_APP_WEBSOCKET_URL);
 
     socket.on("order.assigned", () => {
       store.commit('showSnackbarorder', {

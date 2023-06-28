@@ -8,7 +8,8 @@
               <v-card-title class="text-center">Sign Up</v-card-title>
               <v-card-text>
                 <v-form>
-                  <v-text-field v-model="credentials.mail" :rules="[rules.required, rules.email]" label="Email"></v-text-field>
+                  <v-text-field v-model="credentials.mail" :rules="[rules.required, rules.email]"
+                                label="Email"></v-text-field>
                   <v-text-field
                       v-model="credentials.password"
                       :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -59,13 +60,33 @@
 import {identityAxios, bffAxios} from "@/services/axios";
 import {store} from "@/services/store";
 
+function createAccount() {
+  store.commit('showSnackbarinfo', {
+    message: 'Creating account...',
+    color: 'info',
+  });
+  bffAxios.post('/accounts', this.form)
+      .then(() => {
+        store.commit('showSnackbarinfo', {
+          message: 'Account created',
+          color: 'success',
+        });
+      })
+      .catch(() => {
+        store.commit('showSnackbarinfo', {
+          message: 'Account creation failed',
+          color: 'error',
+        });
+      });
+}
+
 export default {
   data() {
     return {
       credentials: {
         mail: "",
         password: "",
-        type: ""
+        type: "deliveryman"
       },
       form: {
         firstName: '',
@@ -97,7 +118,7 @@ export default {
         color: 'info',
       });
       identityAxios.post('/register', this.credentials)
-          .then(function (response) {
+          .then((response) => {
             console.log(response);
             store.commit('showSnackbarinfo', {
               message: 'Identity created',
@@ -105,7 +126,7 @@ export default {
             });
             this.login();
           })
-          .catch(function (error) {
+          .catch((error) => {
             console.log(error.message);
             store.commit('showSnackbarinfo', {
               message: 'Identity creation failed',
@@ -123,52 +144,29 @@ export default {
         mail: mail,
         password: password,
       })
-          .then(function (response) {
-            if (response.data.token !== "") {
-
-              this.socket.connect();
-              this.socket.emit('setClientId',response.data.token);
-
-              store.commit('setToken', response.data.token);
-              store.commit('setRefreshToken', response.data.refreshToken);
-              store.commit('showSnackbarinfo', {
-                message: 'Login successful',
-                color: 'success',
-              });
-              this.createAccount();
-            } else {
-              store.commit('showSnackbarinfo', {
-                message: 'Login failed',
-                color: 'error',
-              });
-            }
+          .then((response) => {
+            store.commit('setToken', response.data.token);
+            store.commit('setRefreshToken', response.data.refreshToken);
+            store.commit('showSnackbarinfo', {
+              message: 'Login successful',
+              color: 'success',
+            });
+            this.createAccount();
+            this.socket.connect();
+            this.socket.emit('setClientId', response.data.token);
           })
-          .catch(function () {
+          .catch((error) => {
+            console.log(error);
             store.commit('showSnackbarinfo', {
               message: 'Login failed',
               color: 'error',
             });
           });
-    },
-    createAccount() {
-      store.commit('showSnackbarinfo', {
-        message: 'Creating account...',
-        color: 'info',
-      });
-      bffAxios.post('/accounts', this.form)
-          .then(() => {
-            store.commit('showSnackbarinfo', {
-              message: 'Account created',
-              color: 'success',
-            });
-          })
-          .catch(() => {
-            store.commit('showSnackbarinfo', {
-              message: 'Account creation failed',
-              color: 'error',
-            });
-          });
-    },
+    }
+  },
+  created() {
+    // Call createAccount method
+    this.createAccount = createAccount.bind(this);
   },
 };
 </script>
