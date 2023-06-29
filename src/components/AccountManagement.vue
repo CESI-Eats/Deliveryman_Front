@@ -14,10 +14,11 @@
               <v-text-field v-model="form.address.postalCode" label="Postal Code" required></v-text-field>
               <v-text-field v-model="form.address.city" label="City" required></v-text-field>
               <v-text-field v-model="form.address.country" label="Country" required></v-text-field>
+              <v-checkbox v-model="form.available" color="success" label="Available" disabled></v-checkbox>
             </v-form>
           </v-card-text>
           <v-card-actions class="justify-center">
-            <v-btn type="submit" color="Secondary" @click="collectKitty()" :to="`/account`">Collect kitty ({{form.kitty}})</v-btn>
+            <v-btn type="submit" color="secondary" @click="collectKitty()" :to="`/account`">Collect kitty ({{form.kitty}})</v-btn>
             <v-btn type="submit" color="primary" @click="updateAccount()" :to="`/account`">Update</v-btn>
             <v-btn type="submit" color="error" @click="deleteAccount()" :to="`/`">Delete</v-btn>
           </v-card-actions>
@@ -40,6 +41,7 @@ export default {
         birthday: '',
         phoneNumber: '',
         kitty: 0,
+        available: false,
         address: {
           street: '',
           postalCode: '',
