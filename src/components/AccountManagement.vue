@@ -46,7 +46,8 @@ export default {
           city: '',
           country: '',
         }
-      }
+      },
+      mode: 'bank transfer'
     };
   },
   mounted() {
@@ -117,7 +118,7 @@ export default {
         message: 'Collect kitty...',
         color: 'info',
       });
-      bffAxios.put('/collectkitty', this.form)
+      bffAxios.post('/collectkitty', {amount: this.form.kitty, mode: this.mode})
           .then(() => {
             store.commit('showSnackbarinfo', {
               message: 'Kitty collected',
