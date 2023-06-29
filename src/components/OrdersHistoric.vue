@@ -42,7 +42,7 @@
           </v-row>
         </v-card-text>
         <v-card-actions v-if="order.status ==='cooked'" class="justify-center">
-          <v-btn type="submit" color="primary" @click="updateOrder(order?.id)" :to="`/orders`">
+          <v-btn type="submit" color="primary" @click="updateOrder(order?.id)">
           <span>Deliver</span>
           </v-btn>
         </v-card-actions>
@@ -123,12 +123,12 @@ export default {
         color: 'info',
       });
       bffAxios.post("/setorderdelivered", {orderId: id})
-          .then(response => {
-            this.orders = response.data;
+          .then(() => {
             store.commit('showSnackbarinfo', {
               message: 'Orders updated',
               color: 'success',
             });
+            this.fetchOrders();
           })
           .catch(error => {
             console.error(error);
