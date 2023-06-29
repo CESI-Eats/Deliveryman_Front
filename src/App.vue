@@ -51,7 +51,6 @@
 <script>
 import {computed} from 'vue';
 import {useStore} from '@/services/store';
-import {io} from "socket.io-client";
 
 export default {
   name: 'App',
@@ -76,29 +75,10 @@ export default {
     const snackbarinfo = computed(() => store.state.snackbarinfo);
     const snackbarorder = computed(() => store.state.snackbarorder);
 
-    const socket = io(process.env.WEBSOCKET_URL);
-
-    socket.on("order.assigned", () => {
-      store.commit('showSnackbarorder', {
-        message: {
-          id: '',
-          status: 'assigned'
-        },
-        color: 'info',
-      });
-    });
-    socket.on("order.cooked", () => {
-      store.commit('showSnackbarorder', {
-        message: {
-          id: '',
-          status: 'cooked'
-        },
-        color: 'info',
-      });
-    });
+    store.commit('initSocket');
 
     const logout = () => {
-      this.socket.disconnect();
+      store.commit('disconnectSocket');
       store.commit('clearTokens');
       store.commit('showSnackbarinfo', {
         message: 'Log out successful',
