@@ -154,8 +154,6 @@ export default {
               color: 'success',
             });
             this.createAccount();
-            this.socket.connect();
-            this.socket.emit('setClientId', response.data.token);
           })
           .catch((error) => {
             console.log(error);
