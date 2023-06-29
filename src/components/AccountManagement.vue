@@ -14,7 +14,7 @@
               <v-text-field v-model="form.address.postalCode" label="Postal Code" required></v-text-field>
               <v-text-field v-model="form.address.city" label="City" required></v-text-field>
               <v-text-field v-model="form.address.country" label="Country" required></v-text-field>
-              <v-checkbox v-model="form.available" color="success" label="Available" disabled></v-checkbox>
+              <v-checkbox v-model="form.available" color="success" label="Available" ></v-checkbox>
             </v-form>
           </v-card-text>
           <v-card-actions class="justify-center">
@@ -133,6 +133,7 @@ export default {
               color: 'error',
             });
           });
+      this.fetchAccount();
     },
   },
 };
