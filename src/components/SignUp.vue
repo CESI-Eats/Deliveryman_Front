@@ -120,6 +120,7 @@ export default {
       identityAxios.post('/register', this.credentials)
           .then((response) => {
             console.log(response);
+
             store.commit('showSnackbarinfo', {
               message: 'Identity created',
               color: 'success',
@@ -147,6 +148,7 @@ export default {
           .then((response) => {
             store.commit('setToken', response.data.token);
             store.commit('setRefreshToken', response.data.refreshToken);
+            store.commit('connectSocket', store.state.token);
             store.commit('showSnackbarinfo', {
               message: 'Login successful',
               color: 'success',

@@ -37,7 +37,7 @@
       {{ snackbarinfo.message }}
     </v-snackbar>
     <v-snackbar v-model="snackbarorder.show" :color="snackbarorder.color" :timeout="snackbarorder.timeout"
-                :top="snackbarorder.top" :close-on-content-click=true location="center">
+                :top="snackbarorder.top" :close-on-content-click=true location="top">
       The order has been {{ snackbarorder.message.status }}
       <template v-slot:actions>
         <v-btn color="primary" variant="text" @click="snackbarinfo.show = false" to="/orders">
@@ -76,6 +76,10 @@ export default {
     const snackbarorder = computed(() => store.state.snackbarorder);
 
     store.commit('initSocket');
+
+    if (isAuthenticated.value) {
+      store.commit('connectSocket', store.state.token);
+    }
 
     const logout = () => {
       store.commit('disconnectSocket');

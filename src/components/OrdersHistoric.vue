@@ -7,12 +7,12 @@
   <v-row>
     <v-col cols="12" v-for="order in orders" :key="order.id">
       <v-card class="text-center">
-        <v-card-title>{{ order.restorer.name }}</v-card-title>
-        <v-card-subtitle>For {{order.user.name}}</v-card-subtitle>
+        <v-card-title>{{ order?.restorer?.name }}</v-card-title>
+        <v-card-subtitle>For {{order?.user?.name}}</v-card-subtitle>
         <v-card-text>
           <v-row>
-            <v-col cols="6"><v-chip color="primary">{{ order.status }}</v-chip></v-col>
-            <v-col cols="6"><v-chip color="primary">{{ order.date }}</v-chip></v-col>
+            <v-col cols="6"><v-chip color="primary">{{ order?.status }}</v-chip></v-col>
+            <v-col cols="6"><v-chip color="primary">{{ order?.date }}</v-chip></v-col>
           </v-row>
           <v-row>
             <v-col cols="12">
@@ -20,10 +20,10 @@
                 <v-card-title>Addresses</v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12">Restorer: {{ order.restorer.address }}</v-col>
+                    <v-col cols="12">Restorer: {{ order?.restorer?.address }}</v-col>
                   </v-row>
                   <v-row>
-                    <v-col cols="12">User: {{ order.user.address }}</v-col>
+                    <v-col cols="12">User: {{ order?.user?.address }}</v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
@@ -36,14 +36,14 @@
                     :src="menu.image"
                     height="200px"
                 ></v-img>
-                <v-card-title>{{ menu.name }}</v-card-title>
+                <v-card-title>{{ menu?.name }}</v-card-title>
               </v-card>
             </v-col>
           </v-row>
         </v-card-text>
-        <v-card-actions class="justify-center">
-          <v-btn type="submit" color="primary" @click="updateOrder(order.id)" :to="`/orders`">
-          <span v-if="order.status ==='cooked'">Deliver</span>
+        <v-card-actions v-if="order.status ==='cooked'" class="justify-center">
+          <v-btn type="submit" color="primary" @click="updateOrder(order?.id)" :to="`/orders`">
+          <span>Deliver</span>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -60,6 +60,7 @@ export default {
     return {
       orders: [
         {
+          id: '',
           status: '',
           date: '',
           restorer:{
@@ -116,6 +117,7 @@ export default {
           });
     },
     updateOrder(id){
+      console.log("id : "+ id);
       store.commit('showSnackbarinfo', {
         message: 'Updating orders...',
         color: 'info',
