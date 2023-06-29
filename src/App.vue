@@ -76,6 +76,7 @@ export default {
     const snackbarorder = computed(() => store.state.snackbarorder);
 
     store.commit('initSocket');
+
     if (isAuthenticated.value) {
       store.commit('connectSocket', store.state.token);
     }
