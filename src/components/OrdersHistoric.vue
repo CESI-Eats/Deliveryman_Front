@@ -41,7 +41,7 @@
             </v-col>
           </v-row>
         </v-card-text>
-        <v-card-actions v-if="order.status ==='assigned'" class="justify-center">
+        <v-card-actions v-if="order.status ==='cooked'" class="justify-center">
           <v-btn type="submit" color="primary" @click="updateOrder(order?.id)" :to="`/orders`">
           <span>Deliver</span>
           </v-btn>
